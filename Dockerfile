@@ -20,6 +20,7 @@ ENV PHP_BUILD_DEPS bzip2 \
 		libpng12-dev \
 		libreadline6-dev \
 		libssl-dev \
+		libxslt1-dev \
 		libxml2-dev \
 		libreadline-dev \
 		libncursesw5-dev \
@@ -59,6 +60,7 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys 6E4F6AB321FDC07F2C332E3A
 		--with-pdo-mysql \
 		--enable-pcntl \
 		--with-openssl \
+		--with-xsl \
 		--with-readline \
 		--with-zlib \
 		--enable-zip \
