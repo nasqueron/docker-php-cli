@@ -9,22 +9,25 @@ MAINTAINER Sébastien Santoro aka Dereckson <dereckson+nasqueron-docker@espace-w
 # Prepare the container
 #
 
-ENV PHP_VERSION 5.6.29
+ENV PHP_VERSION 7.1.0
 ENV PHP_INI_DIR /usr/local/etc/php
 ENV PHP_BUILD_DEPS bzip2 \
 		file \
 		libbz2-dev \
 		libcurl4-openssl-dev \
+		libedit-dev \
 		libjpeg-dev \
 		libmcrypt-dev \
 		libpng12-dev \
 		libreadline6-dev \
+		libsqlite3-dev
 		libssl-dev \
 		libxslt1-dev \
 		libxml2-dev \
 		libreadline-dev \
 		libncursesw5-dev \
-		libnewt-dev	
+		libnewt-dev \
+		xz-utils	
 ENV LANG C.UTF-8
 
 RUN apt-get update && apt-get install -y ca-certificates curl libxml2 autoconf \
@@ -33,7 +36,10 @@ RUN apt-get update && apt-get install -y ca-certificates curl libxml2 autoconf \
     --no-install-recommends && rm -r /var/lib/apt/lists/* \
     && dpkg-reconfigure locales
 
-RUN gpg --keyserver pool.sks-keyservers.net --recv-keys 6E4F6AB321FDC07F2C332E3AC2BF0BC433CFC8B3 0BD78B5F97500D450838F95DFE857D9A90D90EC1 \
+RUN gpg --keyserver pool.sks-keyservers.net --recv-keys \
+	6E4F6AB321FDC07F2C332E3AC2BF0BC433CFC8B3 \
+	0BD78B5F97500D450838F95DFE857D9A90D90EC1 \
+	A917B1ECDA84AEC2B568FED6F50ABC807BD5DCD0 \
 	&& mkdir -p $PHP_INI_DIR/conf.d \
 	&& set -x \
 	&& curl -SL "http://php.net/get/php-$PHP_VERSION.tar.bz2/from/this/mirror" -o php.tar.bz2 \
@@ -43,6 +49,9 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys 6E4F6AB321FDC07F2C332E3A
 	&& tar -xof php.tar.bz2 -C /usr/src/php --strip-components=1 \
 	&& rm php.tar.bz2* \
 	&& cd /usr/src/php \
+	&& export CFLAGS="-fstack-protector-strong -fpic -fpie -O2" \
+	&& export CPPFLAGS="$CFLAGS" \
+	&& export LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie" \
 	&& ./configure \
 		--with-config-file-path="$PHP_INI_DIR" \
 		--with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
@@ -56,6 +65,8 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys 6E4F6AB321FDC07F2C332E3A
 		--with-gd \
 		--with-jpeg-dir \
 		--enable-gd-native-ttf \
+		--enable-ftp  \
+		--with-libedit \
 		--enable-mbstring \
 		--with-mcrypt \
 		--with-mysqli \
@@ -72,6 +83,7 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys 6E4F6AB321FDC07F2C332E3A
 	&& { find /usr/local/bin /usr/local/sbin -type f -executable -exec strip --strip-all '{}' + || true; } \
 	&& apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $buildDeps \
 	&& make clean \
+	&& pecl install APCu \
 	&& pecl install ncurses \
 	&& pecl install newt \
 	&& cd /opt \
