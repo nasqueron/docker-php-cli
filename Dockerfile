@@ -20,7 +20,7 @@ ENV PHP_BUILD_DEPS bzip2 \
 		libmcrypt-dev \
 		libpng12-dev \
 		libreadline6-dev \
-		libsqlite3-dev
+		libsqlite3-dev \
 		libssl-dev \
 		libxslt1-dev \
 		libxml2-dev \
