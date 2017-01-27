@@ -25,8 +25,6 @@ ENV PHP_BUILD_DEPS bzip2 \
 		libxslt1-dev \
 		libxml2-dev \
 		libreadline-dev \
-		libncursesw5-dev \
-		libnewt-dev \
 		xz-utils	
 ENV LANG C.UTF-8
 
@@ -77,15 +75,12 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys \
 		--with-readline \
 		--with-zlib \
 		--enable-zip \
-		--with-newt \
 	&& make -j"$(nproc)" \
 	&& make install \
 	&& { find /usr/local/bin /usr/local/sbin -type f -executable -exec strip --strip-all '{}' + || true; } \
 	&& apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $buildDeps \
 	&& make clean \
 	&& pecl install APCu \
-	&& pecl install ncurses \
-	&& pecl install newt \
 	&& cd /opt \
 	&& curl -sS https://getcomposer.org/installer | php \
 	&& ln -s /opt/composer.phar /usr/local/bin/composer
