@@ -29,7 +29,7 @@ ENV PHP_BUILD_DEPS bzip2 \
 ENV LANG C.UTF-8
 
 RUN apt-get update && apt-get install -y ca-certificates curl libxml2 autoconf \
-    gcc libc-dev make pkg-config nano less tmux wget git locales \
+    gcc libc-dev make pkg-config nano less tmux wget git locales unzip \
     $PHP_BUILD_DEPS $PHP_EXTRA_BUILD_DEPS \
     --no-install-recommends && rm -r /var/lib/apt/lists/* \
     && dpkg-reconfigure locales
