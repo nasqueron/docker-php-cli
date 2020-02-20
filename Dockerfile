@@ -9,11 +9,12 @@ MAINTAINER Sébastien Santoro aka Dereckson <dereckson+nasqueron-docker@espace-w
 # Prepare the container
 #
 
-ENV PHP_VERSION 7.2.12
+ENV PHP_VERSION 7.3.14
 ENV PHP_INI_DIR /usr/local/etc/php
 ENV PHP_BUILD_DEPS bzip2 \
 		file \
 		libbz2-dev \
+		libzip-dev \
 		libcurl4-openssl-dev \
 		libedit-dev \
 		libjpeg-dev \
@@ -35,8 +36,8 @@ RUN apt-get update && apt-get install -y ca-certificates curl libxml2 autoconf \
     && dpkg-reconfigure locales
 
 RUN gpg --keyserver pool.sks-keyservers.net --recv-keys \
-	B1B44D8F021E4E2D6021E995DC9FF8D3EE5AF27F \
-	1729F83938DA44E27BA0F4D3DBDB397470D12172 \
+	CBAF69F173A0FEA4B537F470D66C9593118BCCB6 \
+	F38252826ACD957EF380D39F2F7956BC5DA04B5D \
 	&& mkdir -p $PHP_INI_DIR/conf.d \
 	&& set -x \
 	&& curl -SL "http://php.net/get/php-$PHP_VERSION.tar.bz2/from/this/mirror" -o php.tar.bz2 \
@@ -73,6 +74,7 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys \
 		--with-readline \
 		--with-zlib \
 		--enable-zip \
+		--with-libzip \
 	&& make -j"$(nproc)" \
 	&& make install \
 	&& { find /usr/local/bin /usr/local/sbin -type f -executable -exec strip --strip-all '{}' + || true; } \
