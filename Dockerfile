@@ -9,7 +9,8 @@ MAINTAINER Sébastien Santoro aka Dereckson <dereckson+nasqueron-docker@espace-w
 # Prepare the container
 #
 
-ENV PHP_VERSION 7.3.14
+ENV PHP_VERSION 7.4.3
+ENV ONIGURAMA_VERSION 6.9.4
 ENV PHP_INI_DIR /usr/local/etc/php
 ENV PHP_BUILD_DEPS bzip2 \
 		file \
@@ -36,8 +37,8 @@ RUN apt-get update && apt-get install -y ca-certificates curl libxml2 autoconf \
     && dpkg-reconfigure locales
 
 RUN gpg --keyserver pool.sks-keyservers.net --recv-keys \
-	CBAF69F173A0FEA4B537F470D66C9593118BCCB6 \
-	F38252826ACD957EF380D39F2F7956BC5DA04B5D \
+	5A52880781F755608BF815FC910DEB46F53EA312 \
+	42670A7FE4D0441C8E4632349E4FDC074A4EF02D \
 	&& mkdir -p $PHP_INI_DIR/conf.d \
 	&& set -x \
 	&& curl -SL "http://php.net/get/php-$PHP_VERSION.tar.bz2/from/this/mirror" -o php.tar.bz2 \
@@ -46,6 +47,11 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys \
 	&& mkdir -p /usr/src/php \
 	&& tar -xof php.tar.bz2 -C /usr/src/php --strip-components=1 \
 	&& rm php.tar.bz2* \
+	&& wget -O /usr/src/onigurama.tar.gz https://github.com/kkos/oniguruma/releases/download/v$ONIGURAMA_VERSION/onig-$ONIGURAMA_VERSION.tar.gz \
+	&& cd /usr/src \
+	&& tar xzf onigurama.tar.gz \
+	&& cd onig-$ONIGURAMA_VERSION \
+	&& ./configure && make && make install \
 	&& cd /usr/src/php \
 	&& export CFLAGS="-fstack-protector-strong -fpic -fpie -O2" \
 	&& export CPPFLAGS="$CFLAGS" \
@@ -60,8 +66,8 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys \
 		--with-bz2 \
 		--enable-calendar \
 		--with-curl \
-		--with-gd \
-		--with-jpeg-dir \
+		--enable-gd \
+		--with-jpeg \
 		--enable-ftp  \
 		--with-libedit \
 		--enable-mbstring \
@@ -73,8 +79,8 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys \
 		--with-xsl \
 		--with-readline \
 		--with-zlib \
-		--enable-zip \
-		--with-libzip \
+		--with-zip \
+		--with-pear \
 	&& make -j"$(nproc)" \
 	&& make install \
 	&& { find /usr/local/bin /usr/local/sbin -type f -executable -exec strip --strip-all '{}' + || true; } \
