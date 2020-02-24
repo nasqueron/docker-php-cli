@@ -88,6 +88,8 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys \
 	&& make clean \
 	&& pecl install APCu \
 	&& cd /opt \
+	&& wget https://psysh.org/psysh && chmod 755 psysh \
+	&& ln -s /opt/psysh /usr/local/bin \
 	&& curl -sS https://getcomposer.org/installer | php \
 	&& ln -s /opt/composer.phar /usr/local/bin/composer
 
