@@ -19,7 +19,6 @@ ENV PHP_BUILD_DEPS bzip2 \
 		libcurl4-openssl-dev \
 		libedit-dev \
 		libjpeg-dev \
-		libmcrypt-dev \
 		libpng12-dev \
 		libreadline6-dev \
 		libsqlite3-dev \
@@ -71,7 +70,6 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys \
 		--enable-ftp  \
 		--with-libedit \
 		--enable-mbstring \
-		--with-mcrypt \
 		--with-mysqli \
 		--with-pdo-mysql \
 		--enable-pcntl \
