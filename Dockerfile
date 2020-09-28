@@ -9,7 +9,7 @@ MAINTAINER Sébastien Santoro aka Dereckson <dereckson+nasqueron-docker@espace-w
 # Prepare the container
 #
 
-ENV PHP_VERSION 7.4.3
+ENV PHP_VERSION 7.4.10
 ENV ONIGURAMA_VERSION 6.9.4
 ENV PHP_INI_DIR /usr/local/etc/php
 ENV PHP_BUILD_DEPS bzip2 \
