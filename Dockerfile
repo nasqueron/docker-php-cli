@@ -2,7 +2,7 @@
 # Nasqueron  - Base PHP CLI image
 #
 
-FROM debian:jessie
+FROM debian:buster
 MAINTAINER Sébastien Santoro aka Dereckson <dereckson+nasqueron-docker@espace-win.org>
 
 #
@@ -19,8 +19,7 @@ ENV PHP_BUILD_DEPS bzip2 \
 		libcurl4-openssl-dev \
 		libedit-dev \
 		libjpeg-dev \
-		libpng12-dev \
-		libreadline6-dev \
+		libpng-dev \
 		libsqlite3-dev \
 		libssl-dev \
 		libxslt1-dev \
@@ -31,6 +30,7 @@ ENV LANG C.UTF-8
 
 RUN apt-get update && apt-get install -y ca-certificates curl libxml2 autoconf \
     gcc libc-dev make pkg-config nano less tmux wget git locales unzip \
+    gpg dirmngr gpg-agent \
     $PHP_BUILD_DEPS $PHP_EXTRA_BUILD_DEPS \
     --no-install-recommends && rm -r /var/lib/apt/lists/* \
     && dpkg-reconfigure locales
