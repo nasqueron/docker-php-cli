@@ -2,7 +2,7 @@
 # Nasqueron  - Base PHP CLI image
 #
 
-FROM debian:buster
+FROM debian:bullseye
 MAINTAINER Sébastien Santoro aka Dereckson <dereckson+nasqueron-docker@espace-win.org>
 
 #
