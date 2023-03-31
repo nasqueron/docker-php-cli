@@ -14,6 +14,7 @@ ENV ONIGURAMA_VERSION 6.9.8
 ENV PHP_INI_DIR /usr/local/etc/php
 ENV PHP_BUILD_DEPS bzip2 \
 		file \
+		g++ \
 		libbz2-dev \
 		libzip-dev \
 		libcurl4-openssl-dev \
@@ -67,6 +68,7 @@ RUN gpg --keyserver keyserver.ubuntu.com --recv-keys \
 		--enable-calendar \
 		--with-curl \
 		--enable-gd \
+		--enable-intl \
 		--with-jpeg \
 		--enable-ftp  \
 		--with-libedit \
